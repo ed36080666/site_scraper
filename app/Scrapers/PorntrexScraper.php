@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Browser;
+namespace App\Scrapers;
 
 use App\Jobs\ProcessVideo;
 use Laravel\Dusk\Browser;
@@ -8,9 +8,10 @@ use PHPUnit\Framework\ExpectationFailedException;
 use Tests\DuskTestCase;
 
 /**
- * This scraper is for P.Trex only!
+ * Scraper for PornTrex (https://porntrex.com).
+ * Always attempts to grab highest resolution available.
  */
-class ScrapePtrexUrls extends DuskTestCase
+class PorntrexScraper extends DuskTestCase
 {
     protected $url;
 

@@ -1,13 +1,16 @@
 <?php
 
-namespace Tests\Browser;
+namespace App\Scrapers;
 
 use App\Jobs\ProcessVideo;
 use Laravel\Dusk\Browser;
-use PHPUnit\Framework\ExpectationFailedException;
 use Tests\DuskTestCase;
 
-class ScrapePwildUrls extends DuskTestCase
+/**
+ * Scraper for PornWild (https://pornwild.com).
+ * Always attempts to grab highest resolution available.
+ */
+class PornwildScraper extends DuskTestCase
 {
     protected $url;
 

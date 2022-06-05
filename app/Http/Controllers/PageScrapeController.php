@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Video;
 use Illuminate\Http\Request;
-use Tests\Browser\ScrapePtrexUrls;
-use Tests\Browser\ScrapePwildUrls;
+use App\Scrapers\PorntrexScraper;
+use App\Scrapers\PornwildScraper;
 
 class PageScrapeController extends Controller
 {
@@ -26,11 +26,11 @@ class PageScrapeController extends Controller
     public function store(Request $request)
     {
         // todo think of cleaner way to do this that allows flexibility moving forward.
-        // factory? scrapers implementing interface? 
+        // factory? scrapers implementing interface?
         if (str_contains($request->video_url, 'porntrex.com')) {
-            $scraper = new ScrapePtrexUrls($request->video_url, $request->filename);
+            $scraper = new PorntrexScraper($request->video_url, $request->filename);
         } elseif (str_contains($request->video_url, 'pornwild.com')) {
-            $scraper = new ScrapePwildUrls($request->video_url, $request->filename);
+            $scraper = new PornwildScraper($request->video_url, $request->filename);
         } else {
             abort(422, 'Unknown base video UR: Doesnt match supported site');
         }
