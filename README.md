@@ -7,6 +7,11 @@ for videos hidden behind logins.
 1. Porntrex (porntrex.com)
 2. PornWild (pornwild.com)
 
+## Usage
+1. Visit one of the supported sites and navigate to a desired video.
+2. Copy the URL from the site and paste it into the web UI input and add a name to be used for saved file.
+3. Click scrape button to launch the job and monitor progress in the UI.
+
 ## Installation
 ### Pre-reqs
 1. \>=PHP 7.2
