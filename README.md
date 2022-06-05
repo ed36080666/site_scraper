@@ -1,26 +1,49 @@
-pre-reqs
-1. ffmpeg needs installed
-2. greater or equal php7.2 
-3. chrome needs to be installed
+# Porn Site Scraper
+A web based scraper for downloading videos from various porn sites. Launches
+a web driver for scraping and can be configured to handle authentication
+for videos hidden behind logins.
 
-steps
-1. Clone the repo
-2. Composer install
-3. php artisan dusk:chrome-driver
-4. npm install
-5. cp .env.example .env
-   1. Update FFMPEG_OUTPUT_PATH
-   2. Update FFMPEG_OUTPUT_PATH (this is used for getting progress)
-6. php artisan key generate
-7. touch <root>/database/database.sqlite
-8. php artisan migrate
-9. build dependencies (npm run dev)
-10. php artisan serve
-11. Must start a queue worker
-    1. todo: provide some info about running multiple (maybe also supervisor?)
+**Currently supported sites**
+1. Porntrex (porntrex.com)
+2. PornWild (pornwild.com)
 
+## Installation
+### Pre-reqs
+1. \>=PHP 7.2
+2. [Chrome](https://www.google.com/chrome/) browser installed on host system
+3. [FFmpeg](https://ffmpeg.org/) installed on host browser
 
-Troubleshooting:
-1. Exceptions in chrome web driver 
-   1. Ensure chrome installed on system
-   2. (see https://laravel.com/docs/7.x/dusk)
+### Installation steps
+1. Clone the repository 
+<br>`git clone https://github.com/ed36080666/site_scraper.git`
+2. Install PHP dependencies
+<br>`composer install`
+3. Install Laravel Dusk chrome driver
+<br>`php artisan dusk:chrome-driver`
+4. Install frontend dependencies
+<br> `npm install`
+5. Copy and configure `.env`
+<br>`cp .env.example .env`
+   1. Set full system path for `FFMPEG_OUTPUT_PATH` variable in `.env`. This determines where saved videos are stored.
+   2. Set full system path for `FFMPEG_LOG_PATH` variable in `.env`. This determines where FFmpeg will store log files.
+6. Generate Laravel application key
+<br> `php artisan key:generate`
+7. Create the base SQLite database
+<br> `touch ./database/database.sqlite`
+8. Run database migrations
+<br> `php artisan migrate`
+9. Build frontend assets
+<br>`npm run dev`
+10. Start a queue worker (handles scraping jobs in background)
+<br>`php artisan queue:work`
+11. Start the application
+    <br>`php artisan serve`
+
+### Running queue workers
+todo...
+
+### Troubleshooting
+1. Chrome Web Driver exceptions
+   1. Ensure Chrome is installed on the host system
+   2. Ensure Laravel Dusk Chrome driver binary is installed
+      1. Visit [Laravel Dusk](https://github.com/ed36080666/site_scraper.git) docs for more info
