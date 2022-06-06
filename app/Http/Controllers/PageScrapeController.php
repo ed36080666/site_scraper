@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Factories\ScraperFactory;
 use App\Video;
 use Illuminate\Http\Request;
-use App\Scrapers\PorntrexScraper;
-use App\Scrapers\PornwildScraper;
 
 class PageScrapeController extends Controller
 {
@@ -20,23 +19,14 @@ class PageScrapeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \App\Exceptions\ScraperDriverNotFoundException
      */
     public function store(Request $request)
     {
-        // todo think of cleaner way to do this that allows flexibility moving forward.
-        // factory? scrapers implementing interface?
-        if (str_contains($request->video_url, 'porntrex.com')) {
-            $scraper = new PorntrexScraper($request->video_url, $request->filename);
-        } elseif (str_contains($request->video_url, 'pornwild.com')) {
-            $scraper = new PornwildScraper($request->video_url, $request->filename);
-        } else {
-            abort(422, 'Unknown base video UR: Doesnt match supported site');
-        }
-
-        $scraper->prepare();
-        $scraper->scrape();
+        $scraper = ScraperFactory::resolveFromUrl($request->video_url);
+        $scraper->scrape($request->video_url, $request->filename);
 
         return redirect()->to('/');
     }

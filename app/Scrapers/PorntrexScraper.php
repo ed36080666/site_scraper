@@ -2,6 +2,7 @@
 
 namespace App\Scrapers;
 
+use App\Contracts\ScraperInterface;
 use App\Jobs\ProcessVideo;
 use Laravel\Dusk\Browser;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -11,23 +12,12 @@ use Tests\DuskTestCase;
  * Scraper for PornTrex (https://porntrex.com).
  * Always attempts to grab highest resolution available.
  */
-class PorntrexScraper extends DuskTestCase
+class PorntrexScraper extends DuskTestCase implements ScraperInterface
 {
-    protected $url;
-
-    protected $filename;
-
-    public function __construct($url, $filename, $name = null, array $data = [], $dataName = '')
-    {
-        $this->url = $url;
-        $this->filename = $filename;
-        parent::__construct($name, $data, $dataName);
-    }
-
     /**
      * A Dusk test example.
      */
-    public function scrape()
+    public function scrape(string $video_url, string $filename): void
     {
         // override storage locations for logs and screenshots because it attempts to put it at the system's
         // root "/" directory and throws a permission denied exception.
@@ -40,9 +30,9 @@ class PorntrexScraper extends DuskTestCase
         ]);
 
         // begin scraping:
-        $this->browse(function (Browser $browser) use ($resolutions) {
+        $this->browse(function (Browser $browser) use ($resolutions, $video_url, $filename) {
 
-            $browser->visit($this->url);
+            $browser->visit($video_url);
 
             // determines if login is required because video is private.
             $login_required = true;
@@ -60,7 +50,7 @@ class PorntrexScraper extends DuskTestCase
                 $browser->press('Log in');
 
                 // login always redirects to home so re-visit the original page and continue script.
-                $browser->visit($this->url);
+                $browser->visit($video_url);
             }
 
             // video urls are stored in global js object "flashvars"
@@ -87,7 +77,7 @@ class PorntrexScraper extends DuskTestCase
                 throw new \Exception('Could not find video URL for any supported resolutions.');
             }
 
-            ProcessVideo::dispatch($urls[$url_key], "{$this->filename}.mp4");
+            ProcessVideo::dispatch($urls[$url_key], "$filename.mp4");
 
             $browser->quit();
         });

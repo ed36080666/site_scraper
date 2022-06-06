@@ -2,6 +2,7 @@
 
 namespace App\Scrapers;
 
+use App\Contracts\ScraperInterface;
 use App\Jobs\ProcessVideo;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -10,20 +11,17 @@ use Tests\DuskTestCase;
  * Scraper for PornWild (https://pornwild.com).
  * Always attempts to grab highest resolution available.
  */
-class PornwildScraper extends DuskTestCase
+class PornwildScraper extends DuskTestCase implements ScraperInterface
 {
-    protected $url;
 
-    protected $filename;
-
-    public function __construct($url, $filename, $name = null, array $data = [], $dataName = '')
-    {
-        $this->url = $url;
-        $this->filename = $filename;
-        parent::__construct($name, $data, $dataName);
-    }
-
-    public function scrape()
+    /**
+     * Scrape a CDN video URL from PornWild and dispatch FFmpeg processing job.
+     * @param string $video_url
+     * @param string $filename
+     * @return void
+     * @throws \Throwable
+     */
+    public function scrape(string $video_url, string $filename): void
     {
         // override storage locations for logs and screenshots because it attempts to put it at the system's
         // root "/" directory and throws a permission denied exception.
@@ -31,9 +29,9 @@ class PornwildScraper extends DuskTestCase
         Browser::$storeConsoleLogAt = storage_path('logs/dusk/console');
 
         // begin scraping:
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (Browser $browser) use ($video_url, $filename) {
 
-            $browser->visit($this->url);
+            $browser->visit($video_url);
 
             // todo handle authentication
 
@@ -42,18 +40,18 @@ class PornwildScraper extends DuskTestCase
 
             // the data will contain a series of alt_urls* for each resolution. The highest
             // alt url is the highest resolution which we always try to grab first.
-            $video_url = $data['video_alt_url4'] // 4k
+            $cdn_video_url = $data['video_alt_url4'] // 4k
                 ?? $data['video_alt_url3']       // 1440
                 ?? $data['video_alt_url2']       // 1080
                 ?? $data['video_alt_url']        // 720
                 ?? $data['video_url']            // 480
                 ?? null;
 
-            if (!$video_url) {
-                dd('Cant find valid video URL in `flashvars`');
+            if (!$cdn_video_url) {
+                throw new \Exception('Cant find valid video URL in `flashvars`');
             }
 
-            ProcessVideo::dispatch($video_url, "{$this->filename}.mp4");
+            ProcessVideo::dispatch($cdn_video_url, "$filename.mp4");
 
             $browser->quit();
         });
