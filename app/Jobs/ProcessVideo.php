@@ -39,8 +39,8 @@ class ProcessVideo implements ShouldQueue
     {
         $this->url = $url;
         $this->filename = $filename;
-        $this->output_path = config('scraper.ffmpeg.output_path');
-        $this->log_path = config('scraper.ffmpeg.log_path');
+        $this->output_path = config('scrapers.ffmpeg.output_path');
+        $this->log_path = config('scrapers.ffmpeg.log_path');
 
         $this->video = Video::create([
             'name' => $filename,

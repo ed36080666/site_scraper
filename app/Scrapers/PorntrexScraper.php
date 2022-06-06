@@ -19,6 +19,8 @@ class PorntrexScraper extends DuskTestCase implements ScraperInterface
      */
     public function scrape(string $video_url, string $filename): void
     {
+        $config = config('scrapers.drivers.porntrex');
+
         // override storage locations for logs and screenshots because it attempts to put it at the system's
         // root "/" directory and throws a permission denied exception.
         Browser::$storeScreenshotsAt = storage_path('logs/dusk/screenshots');
@@ -30,7 +32,7 @@ class PorntrexScraper extends DuskTestCase implements ScraperInterface
         ]);
 
         // begin scraping:
-        $this->browse(function (Browser $browser) use ($resolutions, $video_url, $filename) {
+        $this->browse(function (Browser $browser) use ($config, $resolutions, $video_url, $filename) {
 
             $browser->visit($video_url);
 
@@ -44,9 +46,9 @@ class PorntrexScraper extends DuskTestCase implements ScraperInterface
 
             if ($login_required) {
                 // navigate to & enter credentials for login form.
-                $browser->visit(config('scraper.auth.url'));
-                $browser->type('#login_username', config('scraper.auth.username'));
-                $browser->type('#login_pass', config('scraper.auth.password'));
+                $browser->visit($config['auth']['login_url']);
+                $browser->type('#login_username', $config['auth']['username']);
+                $browser->type('#login_pass', $config['auth']['password']);
                 $browser->press('Log in');
 
                 // login always redirects to home so re-visit the original page and continue script.
