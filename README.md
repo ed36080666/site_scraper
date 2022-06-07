@@ -45,10 +45,46 @@ for videos hidden behind logins.
     <br>`php artisan serve`
 
 ### Running queue workers
-todo...
+To get the most out of this application, you should leverage the Laravel worker queue. The best way to do this is by running queue workers in the background using [Supervisor](http://supervisord.org/installing.html). Supervisor will launch a given number of worker threads and keep them running.
+
+1. Install supervisor
+<br>`sudo apt update && sudo apt install supervisor`
+2. Create a new config file for our workers:
+<br>`sudo vim /etc/supervisor/conf.d/site_scraper_worker.conf`
+
+```
+[program:site_scraper_worker]
+process_name=%(program_name)s_%(process_num)02d
+# cstomize system path to root of the site_scraper directory
+command=php /var/www/vhosts/site_scraper/artisan queue:work --tries=1 --timeout=7000
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+redirect_stderr=true
+stopwaitsecs=7201
+user=# set appropriate system user
+numprocs=8 # Can add more or fewer works based on your hardware, network etc.
+stdout_logfile=# Customize this to wherever you want to place your queue worker logs.
+```
+3. Reread the config files and update supervisor
+<br>`sudo supervisorctl reread`
+<br>`sudo supervisorctl update`
+4. Check the workers are running
+<br>`sudo supervisorctl update`
+<br><br>You should see something along the following:
+```
+site_scraper_worker:site_scraper_worker_00   RUNNING   pid 20567, uptime 0:02:55
+... 1 entry for each worker
+```
 
 ### Troubleshooting
 1. Chrome Web Driver exceptions
    1. Ensure Chrome is installed on the host system
    2. Ensure Laravel Dusk Chrome driver binary is installed
       1. Visit [Laravel Dusk](https://github.com/ed36080666/site_scraper.git) docs for more info
+  2. Out of date errors. Sometimes Laravel Dusk will install a version of the Chrome driver that requires a higher version of the Chrome binary than what is installed on the system. If you see errors about unsupported versions during scraping, try updating the Chrome binary to a higher version (aka re-install/update Chrome browser).
+2. Permission errors
+    1. Ensure ffmpeg binary has execute permissions allowing server to launch processes
+    2. Ensure server has write permissions to the video output directory
+    3. Ensure server has write permissions to all the log directories
