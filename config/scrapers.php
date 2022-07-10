@@ -48,6 +48,17 @@ return [
                 'password'  => env('PORNWILD_PASSWORD', null), // optional
                 'login_url' => env('PORNWILD_LOGIN_URL', null), // optional
             ]
+        ],
+
+        'pornktube' => [
+            'display_name' => 'PornKTube',
+            'base_url'     => 'pornktube.tv',
+            'scraper'      => \App\Scrapers\PornKTubeScraper::class,
+            'auth' => [
+                'username'  => env('PORNKTUBE_USERNAME', null), // optional
+                'password'  => env('PORNKTUBE_PASSWORD', null), // optional
+                'login_url' => env('PORNKTUBE_LOGIN_URL', null), // optional
+            ]
         ]
     ]
 ];
