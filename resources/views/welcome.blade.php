@@ -162,7 +162,7 @@
                           aria-valuemin="0"
                           aria-valuemax="100"
                         >
-                            @{{ video.progress }}%
+                            @{{ video.progress.toFixed(2) }}%
                         </div>
                     </div>
                 </td>

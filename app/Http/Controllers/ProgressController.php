@@ -23,7 +23,11 @@ class ProgressController extends Controller
                     'name' => $item->name,
                     'total_size' => $item->size,
                     'total_duration' => $item->duration,
-                    'progress' => $item->processingProgress()
+                    'progress' => $item->processingProgress(),
+                    'started_at' => $item->started_at,
+                    'height' => $item->height,
+                    'width' => $item->width,
+                    'status' => $item->status
                 ];
             });
 

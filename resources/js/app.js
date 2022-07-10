@@ -16,10 +16,19 @@ var app = new Vue({
     },
     computed: {
         filteredVideos() {
-            if (this.query) {
-                return this.videos.filter(video => video.name.toLowerCase().includes(this.query.toLowerCase()));
-            }
-            return this.videos;
+            // pull all videos where processing has been started and order them.
+            const inProgress = this.videos
+                .filter(video => Boolean(video.started_at))
+                .sort((a, b) => {
+                    return (a.started_at.localeCompare(b.started_at));
+                })
+                .reverse();
+
+            // pull the queued videos that have not started processing.
+            const queued = this.videos.filter(video => !Boolean(video.started_at));
+
+            // concat these video sets with in progress at top and then filter with our search query.
+            return inProgress.concat(queued).filter(video => video.name.toLowerCase().includes((this.query || '').toLowerCase()));
         }
     },
     methods: {
@@ -40,6 +49,12 @@ var app = new Vue({
 
                         if (index > -1) {
                             this.videos[index].progress = item.progress;
+
+                            // if video currently waiting as queued, we will reset its data when it starts processing
+                            // because we have some info we didn't have before (resolution, size, etc.)
+                            if (this.videos[index].status === 'queued') {
+                                this.$set(this.videos, index, { ...this.videos[index], ...item });
+                            }
                         }
                     });
                 })
