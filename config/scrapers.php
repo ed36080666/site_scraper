@@ -59,6 +59,17 @@ return [
                 'password'  => env('PORNKTUBE_PASSWORD', null), // optional
                 'login_url' => env('PORNKTUBE_LOGIN_URL', null), // optional
             ]
+        ],
+
+        'hqporner' => [
+            'display_name' => 'HQ Porner',
+            'base_url'     => 'hqporner.com',
+            'scraper'      => \App\Scrapers\HQPornerScraper::class,
+            'auth' => [
+                'username'  => env('HQPORNER_USERNAME', null), // optional
+                'password'  => env('HQPORNER_PASSWORD', null), // optional
+                'login_url' => env('HQPORNER_LOGIN_URL', null), // optional
+            ]
         ]
     ]
 ];
