@@ -31,7 +31,7 @@ return [
         'porntrex' => [
             'display_name'  => 'PornTrex',
             'base_url'      => 'porntrex.com',
-            'logo_url'      => asset('storage/logos/porntrex.png'),
+            'logo_filename' => 'porntrex.png',
             'scraper'       => \App\Scrapers\PorntrexScraper::class,
             'auth' => [
                 'username'  => env('PORNTREX_USERNAME', null), // optional
@@ -43,7 +43,7 @@ return [
         'pornwild' => [
             'display_name'  => 'PornWild',
             'base_url'      => 'pornwild.com',
-            'logo_url'      => asset('storage/logos/pornwild.png'),
+            'logo_filename' => 'pornwild.png',
             'scraper'       => \App\Scrapers\PornwildScraper::class,
             'auth' => [
                 'username'  => env('PORNWILD_USERNAME', null), // optional
@@ -53,10 +53,10 @@ return [
         ],
 
         'pornktube' => [
-            'display_name' => 'PornKTube',
-            'base_url'     => 'pornktube.tv',
-            'logo_url'      => asset('storage/logos/pornktube.png'),
-            'scraper'      => \App\Scrapers\PornKTubeScraper::class,
+            'display_name'  => 'PornKTube',
+            'base_url'      => 'pornktube.tv',
+            'logo_filename' => 'pornktube.png',
+            'scraper'       => \App\Scrapers\PornKTubeScraper::class,
             'auth' => [
                 'username'  => env('PORNKTUBE_USERNAME', null), // optional
                 'password'  => env('PORNKTUBE_PASSWORD', null), // optional
@@ -65,10 +65,10 @@ return [
         ],
 
         'hqporner' => [
-            'display_name' => 'HQ Porner',
-            'base_url'     => 'hqporner.com',
-            'logo_url'      => asset('storage/logos/hqporner.png'),
-            'scraper'      => \App\Scrapers\HQPornerScraper::class,
+            'display_name'  => 'HQ Porner',
+            'base_url'      => 'hqporner.com',
+            'logo_filename' => 'hqporner.png',
+            'scraper'       => \App\Scrapers\HQPornerScraper::class,
             'auth' => [
                 'username'  => env('HQPORNER_USERNAME', null), // optional
                 'password'  => env('HQPORNER_PASSWORD', null), // optional

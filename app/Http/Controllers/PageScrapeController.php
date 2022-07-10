@@ -14,7 +14,7 @@ class PageScrapeController extends Controller
 
         $logo_map = array_values(array_map(function ($driver_config) {
             return [
-                'src'      => $driver_config['logo_url'],
+                'src'      => asset("storage/logos/{$driver_config['logo_filename']}"),
                 'base_url' => $driver_config['base_url']
             ];
         }, config('scrapers.drivers')));
