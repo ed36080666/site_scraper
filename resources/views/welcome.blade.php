@@ -68,6 +68,27 @@
             grid-template-columns: 1fr 1fr 1fr;
             grid-column-gap: 10px;
         }
+
+        .logo-wrap {
+            display: flex;
+            gap: 1rem;
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            width: auto;
+            height: 100%;
+            max-height: 30px;
+            filter: grayscale(100%);
+            opacity: 0.2;
+            transition: all 0.15s ease;
+        }
+
+        .logo.--active {
+            opacity: 1;
+            filter: grayscale(0);
+        }
     </style>
 </head>
 <body>
@@ -77,10 +98,18 @@
             Scraper
         </div>
 
+        <div class="logo-wrap">
+            <img
+                v-for="logo in logoMap"
+                class="logo"
+                :class="{'--active': (videoUrl || '').includes(logo.base_url)}"
+                :src="logo.src"
+            />
+        </div>
         <div class="">
             <form action="/scrape-page" method="POST">
                 @csrf
-                <input class="form-control" name="video_url" placeholder="URL"/>
+                <input class="form-control" name="video_url" placeholder="URL" v-model="videoUrl" />
                 <input class="form-control mt-3" name="filename" placeholder="Filename"/>
                 <button type="submit" class="btn btn-success d-flex mt-3" style="font-weight: bold;">
                     Scrape
@@ -155,7 +184,10 @@
 </div>
 
 <script>
-  window.__INITIAL_STATE__ = @json(['videos' => $videos])
+    window.__INITIAL_STATE__ = @json([
+        'videos' => $videos,
+        'logo_map' => $logo_map
+    ]);
 </script>
 
 <script src="{{ mix('js/app.js') }}"></script>

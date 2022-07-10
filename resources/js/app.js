@@ -5,10 +5,12 @@ import axios from "axios";
 
 var app = new Vue({
     el: '#app',
-    data: {
+    data: () => ({
         videos: window.__INITIAL_STATE__.videos,
-        query: null
-    },
+        logoMap: window.__INITIAL_STATE__.logo_map,
+        query: null,
+        videoUrl: null,
+    }),
     created() {
         setInterval(this.pollProgress, 1500);
     },

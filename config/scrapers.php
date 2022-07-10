@@ -31,6 +31,7 @@ return [
         'porntrex' => [
             'display_name'  => 'PornTrex',
             'base_url'      => 'porntrex.com',
+            'logo_url'      => asset('storage/logos/porntrex.png'),
             'scraper'       => \App\Scrapers\PorntrexScraper::class,
             'auth' => [
                 'username'  => env('PORNTREX_USERNAME', null), // optional
@@ -42,6 +43,7 @@ return [
         'pornwild' => [
             'display_name'  => 'PornWild',
             'base_url'      => 'pornwild.com',
+            'logo_url'      => asset('storage/logos/pornwild.png'),
             'scraper'       => \App\Scrapers\PornwildScraper::class,
             'auth' => [
                 'username'  => env('PORNWILD_USERNAME', null), // optional
@@ -53,6 +55,7 @@ return [
         'pornktube' => [
             'display_name' => 'PornKTube',
             'base_url'     => 'pornktube.tv',
+            'logo_url'      => asset('storage/logos/pornktube.png'),
             'scraper'      => \App\Scrapers\PornKTubeScraper::class,
             'auth' => [
                 'username'  => env('PORNKTUBE_USERNAME', null), // optional
@@ -64,6 +67,7 @@ return [
         'hqporner' => [
             'display_name' => 'HQ Porner',
             'base_url'     => 'hqporner.com',
+            'logo_url'      => asset('storage/logos/hqporner.png'),
             'scraper'      => \App\Scrapers\HQPornerScraper::class,
             'auth' => [
                 'username'  => env('HQPORNER_USERNAME', null), // optional

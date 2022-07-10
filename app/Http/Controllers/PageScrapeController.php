@@ -11,8 +11,17 @@ class PageScrapeController extends Controller
     public function index(Request $request)
     {
         $videos = Video::orderBy('started_at', 'DESC')->get();
+
+        $logo_map = array_values(array_map(function ($driver_config) {
+            return [
+                'src'      => $driver_config['logo_url'],
+                'base_url' => $driver_config['base_url']
+            ];
+        }, config('scrapers.drivers')));
+
         return view('welcome', [
-            'videos' => $videos
+            'videos'   => $videos,
+            'logo_map' => $logo_map
         ]);
     }
 
