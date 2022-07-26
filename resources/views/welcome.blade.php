@@ -99,12 +99,13 @@
         </div>
 
         <div class="logo-wrap">
-            <img
-                v-for="logo in logoMap"
-                class="logo"
-                :class="{'--active': (videoUrl || '').includes(logo.base_url)}"
-                :src="logo.src"
-            />
+            <a v-for="logo in logoMap" :href="'https://' + logo.base_url" target="_blank">
+                <img
+                    class="logo"
+                    :class="{'--active': (videoUrl || '').includes(logo.base_url)}"
+                    :src="logo.src"
+                />
+            </a>
         </div>
         <div class="">
             <form action="/scrape-page" method="POST">
