@@ -89,6 +89,18 @@
             opacity: 1;
             filter: grayscale(0);
         }
+
+        .streaming {
+            background-image: repeating-linear-gradient(120deg, #cdd0d1, #cdd0d1 20px, #eee 20px, #eee 40px);
+            color: #000;
+            background-size: 5000%;
+            animation: animatedBackground 200s linear infinite;
+        }
+
+        @keyframes animatedBackground {
+            from { background-position: 0 0; }
+            to { background-position: -100% 0; }
+        }
     </style>
 </head>
 <body>
@@ -155,15 +167,15 @@
                     <div class="progress" style="width: 12rem; font-weight: bold; position: relative; top: 5px;">
                         <div
                           class="progress-bar"
-                          :class="{'bg-success' : video.progress === 100 }"
+                          :class="{'bg-success': video.progress === 100, 'streaming': video.is_stream && video.status === 'processing' && video.progress !== 100 }"
                           role="progressbar"
                           :title="video.progress + '%'"
-                          :style="{ width: video.progress + '%' }"
+                          :style="{ width: video.is_stream ? '100%' : video.progress + '%' }"
                           aria-valuenow="0"
                           aria-valuemin="0"
                           aria-valuemax="100"
                         >
-                            @{{ video.progress.toFixed(2) }}%
+                            @{{ video.is_stream && video.status === 'processing' && video.progress !== 100 ? 'Streaming' : video.progress.toFixed(2) + "%" }}
                         </div>
                     </div>
                 </td>
