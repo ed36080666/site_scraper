@@ -74,6 +74,18 @@ return [
                 'password'  => env('HQPORNER_PASSWORD', null), // optional
                 'login_url' => env('HQPORNER_LOGIN_URL', null), // optional
             ]
+        ],
+
+        'pornhub' => [
+            'display_name'  => 'PornHub',
+            'base_url'      => 'pornhub.com',
+            'logo_filename' => 'pornhub.png',
+            'scraper'       => \App\Scrapers\PornHubScraper::class,
+            'auth' => [
+                'username'  => env('PORNHUB_USERNAME', null), // optional
+                'password'  => env('PORNHUB_PASSWORD', null), // optional
+                'login_url' => env('PORNHUB_LOGIN_URL', null), // optional
+            ]
         ]
     ]
 ];
