@@ -31,14 +31,21 @@ class ProcessVideo implements ShouldQueue
     protected $video;
 
     /**
+     * @var bool flag determining if the video URL is a stream (e.g. ".m3u8" extension). for streams
+     * we cannot use the same ffprobe command to grab metadata like filesize, etc.
+     */
+    protected $is_stream;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(string $url, string $filename)
+    public function __construct(string $url, string $filename, bool $is_stream = false)
     {
         $this->url = $url;
         $this->filename = $filename;
+        $this->is_stream = $is_stream;
         $this->output_path = config('scrapers.ffmpeg.output_path');
         $this->log_path = config('scrapers.ffmpeg.log_path');
 
@@ -59,18 +66,23 @@ class ProcessVideo implements ShouldQueue
         $output_path = $this->output_path;
         $log_path = $this->log_path . '/' . str_replace(' ', '_', $this->filename) . '[' . now()->timestamp . '].txt';
 
-        $meta = json_decode(shell_exec("ffprobe -v quiet -print_format json -show_format -show_streams {$this->url}"));
+        // if we are scraping a stream (m3u8) we cannot get metadata the same with ffprobe.
+        // we can still scrape without this metadata but we don't currently have a way
+        // to reliably get progress information.
+        $meta = $this->is_stream
+            ? null // todo look for a solution to allow us to get at least some met adata
+            : json_decode(shell_exec("ffprobe -v quiet -print_format json -show_format -show_streams {$this->url}"));
 
         $this->video->update([
             'status' => Video::STATUS_PROCESSING,
             'started_at' => now(),
-            'codec' => $meta->streams[0]->codec_name,
-            'width' => $meta->streams[0]->width,
-            'height' => $meta->streams[0]->height,
-            'duration' => $meta->format->duration,
-            'size' => $meta->format->size,
-            'bitrate' => $meta->format->bit_rate,
-            'url' => $meta->format->filename,
+            'codec' => $meta->streams[0]->codec_name ?? null,
+            'width' => $meta->streams[0]->width ?? null,
+            'height' => $meta->streams[0]->height ?? null,
+            'duration' => $meta->format->duration ?? null,
+            'size' => $meta->format->size ?? null,
+            'bitrate' => $meta->format->bit_rate ?? null,
+            'url' => $meta->format->filename ?? null,
             'path' => $output_path,
             'log_path' => $log_path
         ]);
