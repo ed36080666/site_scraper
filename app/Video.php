@@ -27,6 +27,7 @@ class Video extends Model
         'url',
         'path',
         'log_path',
+        'is_stream',
     ];
 
     protected $appends = [

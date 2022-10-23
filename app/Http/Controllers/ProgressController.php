@@ -27,7 +27,8 @@ class ProgressController extends Controller
                     'started_at' => $item->started_at,
                     'height' => $item->height,
                     'width' => $item->width,
-                    'status' => $item->status
+                    'status' => $item->status,
+                    'is_stream' => $item->is_stream,
                 ];
             });
 

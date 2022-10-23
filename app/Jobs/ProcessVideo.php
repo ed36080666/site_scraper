@@ -84,7 +84,8 @@ class ProcessVideo implements ShouldQueue
             'bitrate' => $meta->format->bit_rate ?? null,
             'url' => $meta->format->filename ?? null,
             'path' => $output_path,
-            'log_path' => $log_path
+            'log_path' => $log_path,
+            'is_stream' => $this->is_stream,
         ]);
 
         event(new ProcessingStarted($this->video));
