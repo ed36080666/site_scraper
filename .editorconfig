@@ -16,3 +16,6 @@ indent_size = 2
 
 [*.{js,vue,json}]
 indent_size = 2
+
+[*.{html,blade.php}]
+indent_size = 2

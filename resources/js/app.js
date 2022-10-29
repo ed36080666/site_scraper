@@ -1,42 +1,41 @@
 require('./bootstrap');
 
+// Globals
 import Vue from "vue";
 import axios from "axios";
+
+// Components
+import ScrapeListTable from "./components/ScrapeListTable";
+
+Vue.component('scrape-list-table', ScrapeListTable);
+
 
 var app = new Vue({
   el: '#app',
   data: () => ({
     videos: window.__INITIAL_STATE__.videos,
     logoMap: window.__INITIAL_STATE__.logo_map,
-    query: null,
     videoUrl: null,
   }),
   created() {
     setInterval(this.pollProgress, 1500);
   },
-  computed: {
-    filteredVideos() {
-      // pull all videos where processing has been started and order them.
-      const inProgress = this.videos
-        .filter(video => Boolean(video.started_at))
-        .sort((a, b) => {
-          return (a.started_at.localeCompare(b.started_at));
-        })
-        .reverse();
-
-      // pull the queued videos that have not started processing.
-      const queued = this.videos.filter(video => !Boolean(video.started_at));
-
-      // concat these video sets with in progress at top and then filter with our search query.
-      return inProgress.concat(queued).filter(video => video.name.toLowerCase().includes((this.query || '').toLowerCase()));
-    }
-  },
   methods: {
-    resolution(video) {
-      if (video.height && video.width) {
-        return `${video.width}x${video.height}`;
-      }
-      return "";
+    onItemDelete(itemId) {
+      axios.delete(`/${itemId}/delete`)
+        .then(response => {
+          const index = this.videos.findIndex(item => {
+            return item.id === itemId;
+          });
+
+          if (index > -1) {
+            this.videos.splice(index, 1);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert("Could not delete!");
+        })
     },
 
     pollProgress() {
@@ -61,23 +60,6 @@ var app = new Vue({
         .catch(error => {
           console.error(error);
         });
-    },
-
-    deleteVideo(video) {
-      axios.delete(`/${video.id}/delete`)
-        .then(response => {
-          const index = this.videos.findIndex(item => {
-            return item.id === video.id;
-          });
-
-          if (index > -1) {
-            this.videos.splice(index, 1);
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          alert("Could not delete!");
-        })
     }
   }
 })
