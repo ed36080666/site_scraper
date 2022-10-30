@@ -5,17 +5,17 @@ import Vue from "vue";
 import axios from "axios";
 
 // Components
+import ContentScraper from "./components/ContentScraper";
 import ScrapeListTable from "./components/ScrapeListTable";
 
+Vue.component('content-scraper', ContentScraper);
 Vue.component('scrape-list-table', ScrapeListTable);
-
 
 var app = new Vue({
   el: '#app',
   data: () => ({
     videos: window.__INITIAL_STATE__.videos,
-    logoMap: window.__INITIAL_STATE__.logo_map,
-    videoUrl: null,
+    logoMap: window.__INITIAL_STATE__.logo_map
   }),
   created() {
     setInterval(this.pollProgress, 1500);
