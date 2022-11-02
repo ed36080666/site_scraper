@@ -3,7 +3,7 @@
     <div class="mb-2">
       <input
         v-model="query"
-        class="block w-full p-2 text-sm rounded-sm bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-blue-800 focus:ring-blue-400 focus-visible:ring"
+        class="block w-full p-2 text-sm rounded-sm bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-blue-400 focus:ring-blue-400 focus-visible:ring"
         type="text"
         placeholder="Filter by name..."
       />

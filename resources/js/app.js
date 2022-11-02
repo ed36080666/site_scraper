@@ -14,8 +14,8 @@ Vue.component('scrape-list-table', ScrapeListTable);
 var app = new Vue({
   el: '#app',
   data: () => ({
-    videos: window.__INITIAL_STATE__.videos,
-    logoMap: window.__INITIAL_STATE__.logo_map
+    logoMap: window.__INITIAL_STATE__.logo_map,
+    scrapeItems: window.__INITIAL_STATE__.scrape_items
   }),
   created() {
     setInterval(this.pollProgress, 1500);
@@ -24,12 +24,12 @@ var app = new Vue({
     onItemDelete(itemId) {
       axios.delete(`/${itemId}/delete`)
         .then(response => {
-          const index = this.videos.findIndex(item => {
+          const index = this.scrapeItems.findIndex(item => {
             return item.id === itemId;
           });
 
           if (index > -1) {
-            this.videos.splice(index, 1);
+            this.scrapeItems.splice(index, 1);
           }
         })
         .catch(error => {
@@ -42,18 +42,18 @@ var app = new Vue({
       axios.get('/in-progress')
         .then(response => {
           response.data.forEach(item => {
-            const index = this.videos.findIndex(video => {
+            const index = this.scrapeItems.findIndex(video => {
               return video.id === item.id;
             });
 
             if (index > -1) {
-              this.videos[index].progress = item.progress;
+              // this.scrapeItems[index].progress = item.progress;
 
-              // if video currently waiting as queued, we will reset its data when it starts processing
+              // if item currently waiting as queued, we will reset its data when it starts processing
               // because we have some info we didn't have before (resolution, size, etc.)
-              if (this.videos[index].status === 'queued') {
-                this.$set(this.videos, index, {...this.videos[index], ...item});
-              }
+              // if (this.scrapeItems[index].status === 'queued') {
+                this.$set(this.scrapeItems, index, {...this.scrapeItems[index], ...item});
+              // }
             }
           });
         })
