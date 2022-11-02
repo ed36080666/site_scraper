@@ -17,7 +17,7 @@ class PorntrexScraper extends DuskTestCase implements ScraperInterface
     /**
      * A Dusk test example.
      */
-    public function scrape(string $video_url, string $filename): void
+    public function scrape(string $url, string $filename): void
     {
         $config = config('scrapers.drivers.porntrex');
 
@@ -32,9 +32,9 @@ class PorntrexScraper extends DuskTestCase implements ScraperInterface
         ]);
 
         // begin scraping:
-        $this->browse(function (Browser $browser) use ($config, $resolutions, $video_url, $filename) {
+        $this->browse(function (Browser $browser) use ($config, $resolutions, $url, $filename) {
 
-            $browser->visit($video_url);
+            $browser->visit($url);
 
             // determines if login is required because video is private.
             $login_required = true;
@@ -52,7 +52,7 @@ class PorntrexScraper extends DuskTestCase implements ScraperInterface
                 $browser->press('Log in');
 
                 // login always redirects to home so re-visit the original page and continue script.
-                $browser->visit($video_url);
+                $browser->visit($url);
             }
 
             // video urls are stored in global js object "flashvars"

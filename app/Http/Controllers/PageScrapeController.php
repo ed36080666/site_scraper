@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\ScrapeItemDTO;
 use App\Factories\ScraperFactory;
-use App\Video;
+use App\ScrapeItem;
 use Illuminate\Http\Request;
 
 class PageScrapeController extends Controller
 {
     public function index(Request $request)
     {
-        $videos = Video::orderBy('started_at', 'DESC')->get();
+        $scrape_items = ScrapeItem::orderBy('started_at', 'DESC')->get();
 
         $logo_map = array_values(array_map(function ($driver_config) {
             return [
@@ -20,8 +21,10 @@ class PageScrapeController extends Controller
         }, config('scrapers.drivers')));
 
         return view('welcome', [
-            'videos'   => $videos,
-            'logo_map' => $logo_map
+            'logo_map' => $logo_map,
+            'scrape_items' => $scrape_items->map(function (ScrapeItem $item) {
+                return (new ScrapeItemDTO($item->scrapable))->toArray();
+            })
         ]);
     }
 
@@ -42,21 +45,24 @@ class PageScrapeController extends Controller
 
     public function destroy($id)
     {
-        $video = Video::findOrFail($id);
+        $item = ScrapeItem::findOrFail($id);
 
-        if ($video->log_path && file_exists($video->log_path)) {
-            unlink($video->log_path);
+        $scrapable = $item->scrapable;
+
+        if ($item->log_path && file_exists($item->log_path)) {
+            unlink($item->log_path);
         }
 
-        if ($video->path && file_exists($video->buildPath())) {
-            unlink($video->buildPath());
+        if ($item->path && file_exists($item->buildFilepath())) {
+            unlink($item->buildFilepath());
         }
 
-        $video->delete();
+        $scrapable->delete();
+        $item->delete();
 
         return response()->json([
             'success' => true,
-            'message' => "Video: {$video->id} deleted!"
+            'message' => 'Item: '.$item->id.' - '.$scrapable->name().' deleted!'
         ]);
     }
 }

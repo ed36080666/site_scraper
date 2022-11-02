@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Video;
+use App\DTOs\ScrapeItemDTO;
+use App\ScrapeItem;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProgressController extends Controller
@@ -10,26 +12,18 @@ class ProgressController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        $in_progress = Video::where('status', 'processing')
+        // todo determine if these status filters are causing bugs when
+        // items status changes to something not in query
+        $in_progress = ScrapeItem::where('status', 'processing')
             ->orWhere('status', 'done')
             ->get()
-            ->transform(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'total_size' => $item->size,
-                    'total_duration' => $item->duration,
-                    'progress' => $item->processingProgress(),
-                    'started_at' => $item->started_at,
-                    'height' => $item->height,
-                    'width' => $item->width,
-                    'status' => $item->status,
-                    'is_stream' => $item->is_stream,
-                ];
+            ->transform(function (ScrapeItem $item) {
+                return (new ScrapeItemDTO($item->scrapable))->toArray();
             });
 
         return response()->json($in_progress);

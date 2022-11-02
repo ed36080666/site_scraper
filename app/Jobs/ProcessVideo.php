@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\ProcessingStarted;
+use App\ScrapeItem;
 use App\Video;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,6 +31,9 @@ class ProcessVideo implements ShouldQueue
     /** @var \App\Video */
     protected $video;
 
+    /** @var \App\ScrapeItem */
+    protected $scrape_item;
+
     /**
      * @var bool flag determining if the video URL is a stream (e.g. ".m3u8" extension). for streams
      * we cannot use the same ffprobe command to grab metadata like filesize, etc.
@@ -49,11 +53,15 @@ class ProcessVideo implements ShouldQueue
         $this->output_path = config('scrapers.ffmpeg.output_path');
         $this->log_path = config('scrapers.ffmpeg.log_path');
 
-        $this->video = Video::create([
-            'name' => $filename,
-            'status' => Video::STATUS_QUEUED,
-        ]);
+        $this->video = Video::create(['name' => $filename]);
 
+        $this->scrape_item = ScrapeItem::create([
+            'status' => ScrapeItem::STATUS_QUEUED,
+            'url' => $url,
+            'is_stream' => $is_stream,
+            'scrapable_id' => $this->video->id,
+            'scrapable_type' => $this->video->getMorphClass(),
+        ]);
     }
 
     /**
@@ -70,22 +78,23 @@ class ProcessVideo implements ShouldQueue
         // we can still scrape without this metadata but we don't currently have a way
         // to reliably get progress information.
         $meta = $this->is_stream
-            ? null // todo look for a solution to allow us to get at least some met adata
+            ? null // todo look for a solution to allow us to get at least some metadata
             : json_decode(shell_exec("ffprobe -v quiet -print_format json -show_format -show_streams {$this->url}"));
 
         $this->video->update([
-            'status' => Video::STATUS_PROCESSING,
-            'started_at' => now(),
             'codec' => $meta->streams[0]->codec_name ?? null,
             'width' => $meta->streams[0]->width ?? null,
             'height' => $meta->streams[0]->height ?? null,
             'duration' => $meta->format->duration ?? null,
             'size' => $meta->format->size ?? null,
             'bitrate' => $meta->format->bit_rate ?? null,
-            'url' => $meta->format->filename ?? null,
+        ]);
+
+        $this->scrape_item->update([
+            'status' => ScrapeItem::STATUS_PROCESSING,
+            'started_at' => now(),
             'path' => $output_path,
             'log_path' => $log_path,
-            'is_stream' => $this->is_stream,
         ]);
 
         event(new ProcessingStarted($this->video));
@@ -95,21 +104,22 @@ class ProcessVideo implements ShouldQueue
             //        shell_exec("ffmpeg -i \"{$this->url}\" -c copy \"/home/eric/Downloads/ffmpeg_test/{$this->filename}\" > /dev/null 2>&1 &");
 
         } catch (\Exception $e) {
-            $this->video->update([
-                'status' => Video::STATUS_ERROR
+            $this->scrape_item->update([
+                'status' => ScrapeItem::STATUS_ERROR
             ]);
         }
 
-        $this->video->update([
-            'status' => Video::STATUS_DONE,
+        $this->scrape_item->update([
+            'status' => ScrapeItem::STATUS_DONE,
             'finished_at' => now()
         ]);
     }
 
     public function failed(Throwable $exception)
     {
-        $this->video->update([
-            'status' => Video::STATUS_ERROR
+        dump($exception);
+        $this->scrape_item->update([
+            'status' => ScrapeItem::STATUS_ERROR
         ]);
     }
 }

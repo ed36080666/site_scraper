@@ -2,57 +2,39 @@
 
 namespace App;
 
+use App\Contracts\ScrapeItemInterface;
+use App\Traits\ScrapeItemTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Video extends Model
+class Video extends Model implements ScrapeItemInterface
 {
-    const STATUS_QUEUED = 'queued';
-    const STATUS_PROCESSING = 'processing';
-    const STATUS_ERROR = 'error';
-    const STATUS_DONE = 'done';
+    use ScrapeItemTrait;
 
     protected $fillable = [
         'name',
-        'status',
-        'started_at',
-        'finished_at',
         'codec',
         'width',
         'height',
         'duration',
         'size',
         'bitrate',
-        'url',
-        'path',
-        'log_path',
-        'is_stream',
     ];
 
-    protected $appends = [
-        'progress'
-    ];
-
-    public function getProgressAttribute()
+    public function scrapeItem(): MorphOne
     {
-        return $this->processingProgress();
-    }
-
-    public function scopeInProgress(Builder $builder)
-    {
-        return $builder->where('status', self::STATUS_PROCESSING)
-            ->where('finished_at', null);
+        return $this->morphOne(ScrapeItem::class, 'scrapable');
     }
 
     public function getLastLogLine()
     {
-        if (!$this->log_path || !file_exists($this->log_path)) {
+        if (!$this->scrapeItem->log_path || !file_exists($this->scrapeItem->log_path)) {
             return null;
         }
 
         $line = '';
-        $f = fopen($this->log_path, 'r');
+        $f = fopen($this->scrapeItem->log_path, 'r');
         $cursor = -1;
 
         fseek($f, $cursor, SEEK_END);
@@ -118,28 +100,28 @@ class Video extends Model
         return round(($seconds_processed / $total_length) * 100, 2);
     }
 
-    public function isProcessing(): bool
+    public function height(): ?int
     {
-        return $this->status === self::STATUS_PROCESSING;
+        return $this->height;
     }
 
-    public function isDone(): bool
+    public function width(): ?int
     {
-        return $this->status === self::STATUS_DONE;
+        return $this->width;
     }
 
-    public function isErrored(): bool
+    public function name(): string
     {
-        return $this->status === self::STATUS_ERROR;
+        return $this->name;
     }
 
-    public function isQueued(): bool
+    public function progress(): float
     {
-        return $this->status === self::STATUS_QUEUED;
+        return $this->processingProgress();
     }
 
-    public function buildPath(): string
+    public function type(): string
     {
-        return $this->path . '/' . $this->name;
+        return 'video';
     }
 }
