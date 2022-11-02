@@ -18,6 +18,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Photo Galleries
+    |--------------------------------------------------------------------------
+    |
+    | Determines where scraped photo galleries and scraping logs are stored. Ensure these
+    | are full system paths that already exist and have correct permissions.
+    |
+    */
+    'photo_gallery' => [
+        'output_path' => env('PHOTO_OUTPUT_PATH'),
+        'log_path' => env('PHOTO_LOG_PATH'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Drivers
     |--------------------------------------------------------------------------
     |
@@ -85,6 +99,18 @@ return [
                 'username'  => env('PORNHUB_USERNAME', null), // optional
                 'password'  => env('PORNHUB_PASSWORD', null), // optional
                 'login_url' => env('PORNHUB_LOGIN_URL', null), // optional
+            ]
+        ],
+
+        'pornpics' => [
+            'display_name'  => 'PornPics',
+            'base_url'      => 'pornpics.com',
+            'logo_filename' => 'pornpics.png',
+            'scraper'       => \App\Scrapers\PornPicsScraper::class,
+            'auth' => [
+                'username'  => env('PORNPICS_USERNAME', null), // optional
+                'password'  => env('PORNPICS_PASSWORD', null), // optional
+                'login_url' => env('PORNPICS_LOGIN_URL', null), // optional
             ]
         ]
     ]
