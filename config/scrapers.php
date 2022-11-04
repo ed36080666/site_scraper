@@ -112,6 +112,18 @@ return [
                 'password'  => env('PORNPICS_PASSWORD', null), // optional
                 'login_url' => env('PORNPICS_LOGIN_URL', null), // optional
             ]
+        ],
+
+        'pichunter' => [
+            'display_name'  => 'Pic Hunter',
+            'base_url'      => 'pichunter.com',
+            'logo_filename' => 'pichunter.png',
+            'scraper'       => \App\Scrapers\PicHunterScraper::class,
+            'auth' => [
+                'username'  => env('PICHUNTER_USERNAME', null), // optional
+                'password'  => env('PICHUNTER_PASSWORD', null), // optional
+                'login_url' => env('PICHUNTER_LOGIN_URL', null), // optional
+            ]
         ]
     ]
 ];
