@@ -53,9 +53,7 @@ class PageScrapeController extends Controller
             unlink($item->log_path);
         }
 
-        if ($item->path && file_exists($item->buildFilepath())) {
-            unlink($item->buildFilepath());
-        }
+        $scrapable->removeFiles();
 
         $scrapable->delete();
         $item->delete();

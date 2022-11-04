@@ -38,12 +38,27 @@ class PhotoGallery extends Model implements ScrapeItemInterface
 
     public function progress(): float
     {
-        // todo
-        return 0;
+        if (!$this->scrapeItem->log_path || !file_exists($this->scrapeItem->log_path)) {
+            return 0;
+        }
+
+        $file = escapeshellarg($this->scrapeItem->log_path);
+        $line = `tail -n 1 $file`;
+
+        $progress = (int) $line;
+        return (float) ($progress / $this->number_photos) * 100;
     }
 
     public function type(): string
     {
         return 'gallery';
+    }
+
+    public function removeFiles(): void
+    {
+        if ($this->path() && is_dir($this->path())) {
+            array_map( 'unlink', array_filter((array) glob("{$this->path()}/*")));
+            rmdir($this->path());
+        }
     }
 }

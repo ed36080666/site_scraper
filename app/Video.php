@@ -124,4 +124,12 @@ class Video extends Model implements ScrapeItemInterface
     {
         return 'video';
     }
+
+    public function removeFiles(): void
+    {
+        $filepath = $this->path() . '/' . $this->name();
+        if ($filepath) {
+            unlink($filepath);
+        }
+    }
 }

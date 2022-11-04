@@ -16,6 +16,11 @@ trait ScrapeItemTrait
         return $this->scrapeItem->started_at;
     }
 
+    public function path(): ?string
+    {
+        return $this->scrapeItem->path;
+    }
+
     public function isStream(): bool
     {
         return (bool) $this->scrapeItem->is_stream;

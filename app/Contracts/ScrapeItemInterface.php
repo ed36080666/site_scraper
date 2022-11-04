@@ -12,6 +12,7 @@ interface ScrapeItemInterface
     public function isStream(): bool;
     public function name(): string;
     public function progress(): float;
+    public function removeFiles(): void;
     public function status(): string;
     public function startedAt(); // todo typehint
     public function scrapeItem(): MorphOne;

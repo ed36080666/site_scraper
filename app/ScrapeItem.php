@@ -31,9 +31,4 @@ class ScrapeItem extends Model
     {
         return $this->morphTo();
     }
-
-    public function buildFilepath(): string
-    {
-        return $this->path . '/' . $this->scrapable->name();
-    }
 }
