@@ -117,7 +117,6 @@ class ProcessVideo implements ShouldQueue
 
     public function failed(Throwable $exception)
     {
-        dump($exception);
         $this->scrape_item->update([
             'status' => ScrapeItem::STATUS_ERROR
         ]);
