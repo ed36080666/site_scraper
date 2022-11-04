@@ -3,6 +3,7 @@
 namespace App\Scrapers;
 
 use App\Contracts\ScraperInterface;
+use App\Jobs\ProcessPhotoGallery;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
@@ -26,6 +27,14 @@ class PornPicsScraper extends DuskTestCase implements ScraperInterface
         // begin scraping:
         $this->browse(function (Browser $browser) use ($url, $filename) {
             $browser->visit($url);
+
+            $image_nodes = $browser->elements("#main #tiles a");
+            $photo_urls = collect([]);
+            foreach ($image_nodes as $node) {
+                $photo_urls->push($node->getAttribute('href'));
+            }
+
+            ProcessPhotoGallery::dispatch($url, $photo_urls->toArray(), $filename);
 
             $browser->quit();
         });
