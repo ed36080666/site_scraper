@@ -1,14 +1,20 @@
 # Porn Site Scraper
-A web based scraper for downloading videos from various porn sites. Launches
+A web based scraper and UI monitoring tool for downloading videos and full photo galleries from various porn sites. Launches
 a web driver for scraping and can be configured to handle authentication
-for videos hidden behind logins.
+for scraping media hidden behind logins.
 
-**Currently supported sites**
+### Currently supported sites
+
+**Videos**
 1. PornHub (pornhub.com)
 2. Porntrex (porntrex.com)
 2. PornWild (pornwild.com)
 3. PornKTube (pornktube.tv)
 4. HQPorner (hqporner.com)
+
+**Photo Galleries**
+1. PornPics (pornpics.com)
+2. PicHunter (pichunter.com)
 
 ## Usage
 1. Visit one of the supported sites and navigate to a desired video.
