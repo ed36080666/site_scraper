@@ -55,9 +55,14 @@ class PhotoGallery extends Model implements ScrapeItemInterface
         return 'gallery';
     }
 
+    public function fileExists(): bool
+    {
+        return $this->path() && is_dir($this->path());
+    }
+
     public function removeFiles(): void
     {
-        if ($this->path() && is_dir($this->path())) {
+        if ($this->fileExists()) {
             // delete all files in directory first
             array_map( 'unlink', array_filter((array) glob("{$this->path()}/*")));
             rmdir($this->path());
