@@ -7,10 +7,11 @@ use App\Traits\ScrapeItemTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Video extends Model implements ScrapeItemInterface
 {
-    use ScrapeItemTrait;
+    use ScrapeItemTrait, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -128,7 +129,7 @@ class Video extends Model implements ScrapeItemInterface
     public function removeFiles(): void
     {
         $filepath = $this->path() . '/' . $this->name();
-        if ($filepath) {
+        if ($this->path() && file_exists($filepath)) {
             unlink($filepath);
         }
     }
