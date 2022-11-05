@@ -14,12 +14,12 @@ class PornKTubeScraper extends DuskTestCase implements ScraperInterface
 
     /**
      * Scrape a CDN video URL from PornWild and dispatch FFmpeg processing job.
-     * @param string $video_url
+     * @param string $url
      * @param string $filename
      * @return void
      * @throws Throwable
      */
-    public function scrape(string $video_url, string $filename): void
+    public function scrape(string $url, string $filename): void
     {
         // override storage locations for logs and screenshots because it attempts to put it at the system's
         // root "/" directory and throws a permission denied exception.
@@ -27,8 +27,8 @@ class PornKTubeScraper extends DuskTestCase implements ScraperInterface
         Browser::$storeConsoleLogAt = storage_path('logs/dusk/console');
 
         // begin scraping:
-        $this->browse(function (Browser $browser) use ($video_url, $filename) {
-            $browser->visit($video_url);
+        $this->browse(function (Browser $browser) use ($url, $filename) {
+            $browser->visit($url);
 
             // there are hidden divs that act as buttons for each resolution. these contain
             // all the url parts in a semi-colon delimited string in the `data-c` attribute.

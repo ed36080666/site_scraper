@@ -11,17 +11,19 @@ class HQPornerScraper extends DuskTestCase implements ScraperInterface
 {
     const RESOLUTIONS = ['2160', '1440', '1080', '720', '480', '360'];
 
-    public function scrape(string $video_url, string $filename): void
+    public function scrape(string $url, string $filename): void
     {
         // override storage locations for logs and screenshots because it attempts to put it at the system's
         // root "/" directory and throws a permission denied exception.
         Browser::$storeScreenshotsAt = storage_path('logs/dusk/screenshots');
         Browser::$storeConsoleLogAt = storage_path('logs/dusk/console');
 
-        $this->browse(function (Browser $browser) use ($video_url, $filename) {
-            $browser->visit($video_url);
+        $this->browse(function (Browser $browser) use ($url, $filename) {
+            $browser->visit($url);
 
-            $browser->withinFrame('iframe', function (Browser $iframe) use ($filename) {
+            // todo is this necessary?
+//            $browser->pause(5000);
+            $browser->withinFrame('#playerWrapper iframe', function (Browser $iframe) use ($filename) {
                 $source_nodes = $iframe->elements('source');
 
                 $node = $this->findHighestResolution($source_nodes);

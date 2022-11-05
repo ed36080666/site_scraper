@@ -28,13 +28,14 @@
         Scraper
       </div>
       <div>
+        {{-- TODO Commented out for NSFW --}}
         <content-scraper
           :logo-map="logoMap"
           csrf="{{ csrf_token() }}"
         />
       </div>
       <scrape-list-table
-        :items="videos"
+        :items="scrapeItems"
         @delete="onItemDelete"
       />
     </div>
@@ -42,8 +43,8 @@
 
   <script>
     window.__INITIAL_STATE__ = @json([
-      'videos' => $videos,
-      'logo_map' => $logo_map
+      'logo_map' => $logo_map,
+      'scrape_items' => $scrape_items
     ]);
   </script>
 
