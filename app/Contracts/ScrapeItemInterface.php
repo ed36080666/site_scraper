@@ -10,6 +10,7 @@ interface ScrapeItemInterface
     public function fileExists(): bool;
     public function height(): ?int;
     public function isStream(): bool;
+    public function logExists(): bool;
     public function name(): string;
     public function progress(): float;
     public function removeFiles(): void;

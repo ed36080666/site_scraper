@@ -16,6 +16,11 @@ trait ScrapeItemTrait
         return $this->scrapeItem->started_at;
     }
 
+    public function logExists(): bool
+    {
+        return $this->scrapeItem->log_path && file_exists($this->scrapeItem->log_path);
+    }
+
     public function path(): ?string
     {
         return $this->scrapeItem->path;
