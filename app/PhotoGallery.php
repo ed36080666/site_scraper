@@ -6,10 +6,11 @@ use App\Contracts\ScrapeItemInterface;
 use App\Traits\ScrapeItemTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PhotoGallery extends Model implements ScrapeItemInterface
 {
-    use ScrapeItemTrait;
+    use ScrapeItemTrait, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -57,6 +58,7 @@ class PhotoGallery extends Model implements ScrapeItemInterface
     public function removeFiles(): void
     {
         if ($this->path() && is_dir($this->path())) {
+            // delete all files in directory first
             array_map( 'unlink', array_filter((array) glob("{$this->path()}/*")));
             rmdir($this->path());
         }

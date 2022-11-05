@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ScrapeItem extends Model
 {
+    use SoftDeletes;
+
     const STATUS_QUEUED = 'queued';
     const STATUS_PROCESSING = 'processing';
     const STATUS_ERROR = 'error';
