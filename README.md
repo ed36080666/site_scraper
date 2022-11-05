@@ -11,6 +11,7 @@ for scraping media hidden behind logins.
 2. PornWild (pornwild.com)
 3. PornKTube (pornktube.tv)
 4. HQPorner (hqporner.com)
+5. WhoresHub (whoreshub.com)
 
 **Photo Galleries**
 1. PornPics (pornpics.com)

@@ -124,6 +124,18 @@ return [
                 'password'  => env('PICHUNTER_PASSWORD', null), // optional
                 'login_url' => env('PICHUNTER_LOGIN_URL', null), // optional
             ]
+        ],
+
+        'whoreshub' => [
+            'display_name'  => 'WhoresHub',
+            'base_url'      => 'whoreshub.com',
+            'logo_filename' => 'whoreshub.png',
+            'scraper'       => \App\Scrapers\WhoresHubScraper::class,
+            'auth' => [
+                'username'  => env('WHORESHUB_USERNAME', null), // optional
+                'password'  => env('WHORESHUB_PASSWORD', null), // optional
+                'login_url' => env('WHORESHUB_LOGIN_URL', null), // optional
+            ]
         ]
     ]
 ];

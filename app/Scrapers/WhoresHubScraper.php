@@ -9,14 +9,14 @@ use PHPUnit\Framework\ExpectationFailedException;
 use Tests\DuskTestCase;
 
 /**
- * Scraper for PornTrex (https://porntrex.com).
+ * Scraper for WhoresHub (https://whoreshub.com).
  * Always attempts to grab highest resolution available.
  */
-class PorntrexScraper extends DuskTestCase implements ScraperInterface
+class WhoresHubScraper extends DuskTestCase implements ScraperInterface
 {
     public function scrape(string $url, string $filename): void
     {
-        $config = config('scrapers.drivers.porntrex');
+        $config = config('scrapers.drivers.whoreshub');
 
         // override storage locations for logs and screenshots because it attempts to put it at the system's
         // root "/" directory and throws a permission denied exception.
@@ -76,7 +76,10 @@ class PorntrexScraper extends DuskTestCase implements ScraperInterface
                 throw new \Exception('Could not find video URL for any supported resolutions.');
             }
 
-            ProcessVideo::dispatch($urls[$url_key], "$filename.mp4");
+            // the cdn requires a referer of the same url, or it will return a 403
+            $ffmpeg_args = "-headers 'Referer: $url'";
+
+            ProcessVideo::dispatch($urls[$url_key], "$filename.mp4", true, $ffmpeg_args);
 
             $browser->quit();
         });
