@@ -126,10 +126,16 @@ class Video extends Model implements ScrapeItemInterface
         return 'video';
     }
 
+    public function fileExists(): bool
+    {
+        $filepath = $this->path() . '/' . $this->name();
+        return $this->path() && file_exists($filepath);
+    }
+
     public function removeFiles(): void
     {
         $filepath = $this->path() . '/' . $this->name();
-        if ($this->path() && file_exists($filepath)) {
+        if ($this->fileExists()) {
             unlink($filepath);
         }
     }

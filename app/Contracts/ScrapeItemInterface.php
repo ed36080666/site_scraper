@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 interface ScrapeItemInterface
 {
     public function id(): int;
+    public function fileExists(): bool;
     public function height(): ?int;
-    public function width(): ?int;
     public function isStream(): bool;
     public function name(): string;
     public function progress(): float;
@@ -17,4 +17,5 @@ interface ScrapeItemInterface
     public function startedAt(); // todo typehint
     public function scrapeItem(): MorphOne;
     public function type(): string;
+    public function width(): ?int;
 }
