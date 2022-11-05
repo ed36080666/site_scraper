@@ -20,3 +20,5 @@ Route::get('/in-progress', 'ProgressController@index');
 Route::post('/scrape-page', 'PageScrapeController@store');
 
 Route::delete('/{video}/delete', 'PageScrapeController@destroy');
+
+Route::get('/{scrape_item}/log', 'PageScrapeController@log');

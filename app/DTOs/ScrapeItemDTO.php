@@ -16,6 +16,7 @@ class ScrapeItemDTO
     public $is_stream;
     public $type;
     public $file_exists;
+    public $log_exists;
 
     public function __construct(ScrapeItemInterface $item)
     {
@@ -29,6 +30,7 @@ class ScrapeItemDTO
         $this->started_at = $item->startedAt();
         $this->type = $item->type();
         $this->file_exists = $item->fileExists();
+        $this->log_exists = $item->logExists();
     }
 
     public function toArray(): array
@@ -44,6 +46,7 @@ class ScrapeItemDTO
             'started_at' => $this->started_at,
             'type' => $this->type,
             'file_exists' => $this->file_exists,
+            'log_exists' => $this->log_exists,
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\DTOs\ScrapeItemDTO;
 use App\Factories\ScraperFactory;
 use App\ScrapeItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class PageScrapeController extends Controller
 {
@@ -28,6 +29,15 @@ class PageScrapeController extends Controller
         ]);
     }
 
+    public function log(ScrapeItem $scrape_item): \Illuminate\Http\Response
+    {
+        $log_contents = file_get_contents($scrape_item->log_path);
+        $response = Response::make($log_contents);
+        $response->header('Content-Type', 'text/plain');
+
+        return $response;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -43,7 +53,7 @@ class PageScrapeController extends Controller
         return redirect()->to('/');
     }
 
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\JsonResponse
     {
         $item = ScrapeItem::findOrFail($id);
 
