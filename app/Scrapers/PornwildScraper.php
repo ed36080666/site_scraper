@@ -5,6 +5,7 @@ namespace App\Scrapers;
 use App\Contracts\ScraperInterface;
 use App\Jobs\ProcessVideo;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\ExpectationFailedException;
 use Tests\DuskTestCase;
 
 /**
@@ -30,10 +31,24 @@ class PornwildScraper extends DuskTestCase implements ScraperInterface
 
         // begin scraping:
         $this->browse(function (Browser $browser) use ($url, $filename) {
-
+            $config = config('scrapers.drivers.pornwild');
             $browser->visit($url);
+ 
+            $login_required = true;
+            try {
+                $browser->assertSee('private video');
+            } catch (ExpectationFailedException $e) {
+                $login_required = false;
+            }
 
-            // todo handle authentication
+            if ($login_required) {
+                $browser->visit($config['auth']['login_url']);
+                $browser->type('#login_username', $config['auth']['username']);
+                $browser->type('#login_pass', $config['auth']['password']);
+                $browser->press('Log in');
+
+                $browser->visit($url);
+            }
 
             $data = $browser->script("return window.flashvars");
             $data = $data[0]; // data array lives in the first item returned from javascript flashvars
