@@ -19,10 +19,13 @@ class HQPornerScraper extends DuskTestCase implements ScraperInterface
         Browser::$storeConsoleLogAt = storage_path('logs/dusk/console');
 
         $this->browse(function (Browser $browser) use ($url, $filename) {
-            $browser->visit($url);
+            // hqporner does some funky stuff with referrers and some of the videos cannot
+            // be accessed directly from their url in the browser. this only applies on some
+            // and I cannot find a pattern. to bypass this, we will first visit the base
+            // url and then call a window.location to mo
+            $browser->visit('https://' . config('scrapers.drivers.hqporner.base_url'));
+            $browser->script("return window.location.href = '$url'");
 
-            // todo is this necessary?
-//            $browser->pause(5000);
             $browser->withinFrame('#playerWrapper iframe', function (Browser $iframe) use ($filename) {
                 $source_nodes = $iframe->elements('source');
 
