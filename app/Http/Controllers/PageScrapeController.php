@@ -48,7 +48,9 @@ class PageScrapeController extends Controller
     public function store(Request $request)
     {
         $scraper = ScraperFactory::resolveFromUrl($request->video_url);
-        $scraper->scrape($request->video_url, $request->filename);
+
+        $filename = str_replace("'", '', $request->filename);
+        $scraper->scrape($request->video_url, $filename);
 
         return redirect()->to('/');
     }
