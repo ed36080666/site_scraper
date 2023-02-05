@@ -54,16 +54,25 @@ return [
             ]
         ],
 
-        'pornwild' => [
-            'display_name'  => 'PornWild',
-            'base_url'      => 'pornwild.com',
-            'logo_filename' => 'pornwild.png',
-            'scraper'       => \App\Scrapers\PornwildScraper::class,
-            'auth' => [
-                'username'  => env('PORNWILD_USERNAME', null), // optional
-                'password'  => env('PORNWILD_PASSWORD', null), // optional
-                'login_url' => env('PORNWILD_LOGIN_URL', null), // optional
-            ]
+        // @note it appears PornWild has been shutdown. This comment-out is just to hide
+        // the option from UI. The rest of the scraping code exists in case it comes back.
+//        'pornwild' => [
+//            'display_name'  => 'PornWild',
+//            'base_url'      => 'pornwild.com',
+//            'logo_filename' => 'pornwild.png',
+//            'scraper'       => \App\Scrapers\PornwildScraper::class,
+//            'auth' => [
+//                'username'  => env('PORNWILD_USERNAME', null), // optional
+//                'password'  => env('PORNWILD_PASSWORD', null), // optional
+//                'login_url' => env('PORNWILD_LOGIN_URL', null), // optional
+//            ]
+//        ],
+
+        'fullporner' => [
+            'display_name'  => 'FullPorner',
+            'base_url'      => 'fullporner.com',
+            'logo_filename' => 'fullporner.png',
+            'scraper'       => \App\Scrapers\FullPornerScraper::class,
         ],
 
         'pornktube' => [
