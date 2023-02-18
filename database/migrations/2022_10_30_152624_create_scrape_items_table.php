@@ -1,7 +1,5 @@
 <?php
 
-use App\ScrapeItem;
-use App\Video;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,20 +25,6 @@ class CreateScrapeItemsTable extends Migration
             $table->string('log_path')->nullable();
             $table->timestamps();
         });
-
-        Video::all()->each(function (Video $video) {
-            ScrapeItem::create([
-                'scrapable_id' => $video->id,
-                'scrapable_type' => $video->getMorphClass(),
-                'status' => $video->status,
-                'started_at' => $video->started_at,
-                'finished_at' => $video->finished_at,
-                'url' => $video->url,
-                'path' => $video->path,
-                'log_path' => $video->log_path,
-                'is_stream' => $video->is_stream ?? false
-            ]);
-        });;
     }
 
     /**

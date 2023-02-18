@@ -1,6 +1,5 @@
 <?php
 
-use App\Video;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +13,6 @@ class RemoveColumnsFromVideosTable extends Migration
      */
     public function up()
     {
-        $videos = Video::all();
-
         // sqlite is funky and laravel wasn't letting me just drop the columns I
         // wanted to drop... so I guess we'll just drop/recreate the table :eye-roll:
         Schema::dropIfExists('videos');
@@ -29,23 +26,6 @@ class RemoveColumnsFromVideosTable extends Migration
             $table->string('size')->nullable();
             $table->string('bitrate')->nullable();
             $table->timestamps();
-        });
-
-        $videos->each(function (Video $video) {
-            $newVideo = new Video;
-            $newVideo->forceFill([
-                'id' => $video->id,
-                'name' => $video->name,
-                'codec' => $video->codec,
-                'width' => $video->width,
-                'height' => $video->height,
-                'duration' => $video->duration,
-                'size' => $video->size,
-                'bitrate' => $video->bitrate,
-                'created_at' => $video->created_at,
-                'updated_at' => $video->updated_at
-            ]);
-            $newVideo->save();
         });
     }
 
