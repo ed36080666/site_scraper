@@ -7,7 +7,7 @@ use App\Jobs\ProcessVideo;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
-class HQPornerScraper extends DuskTestCase implements ScraperInterface
+class FullPornerScraper extends DuskTestCase implements ScraperInterface
 {
     const RESOLUTIONS = ['2160', '1440', '1080', '720', '480', '360'];
 
@@ -19,24 +19,23 @@ class HQPornerScraper extends DuskTestCase implements ScraperInterface
         Browser::$storeConsoleLogAt = storage_path('logs/dusk/console');
 
         $this->browse(function (Browser $browser) use ($url, $filename) {
-            // hqporner does some funky stuff with referrers and some of the videos cannot
-            // be accessed directly from their url in the browser. this only applies on some
-            // and I cannot find a pattern. to bypass this, we will first visit the base
-            // url and then call a window.location to navigate with valid referrers.
-            $browser->visit('https://' . config('scrapers.drivers.hqporner.base_url'));
-            $browser->script("return window.location.href = '$url'");
+            $browser->visit($url);
 
-            $browser->withinFrame('#playerWrapper iframe', function (Browser $iframe) use ($filename) {
-                $source_nodes = $iframe->elements('source');
+            $video_node = $browser->element('.single-video iframe');
+            $video_url = $video_node->getAttribute('src');
 
-                $node = $this->findHighestResolution($source_nodes);
+            // the first 2 characters of scraped url are '//'. we need to append
+            // https: for a valid path to give FFmpeg.
+            $cdn_url = "https:$video_url";
 
-                $video_src = $node->getAttribute('src');
+            $browser->visit($cdn_url);
 
-                // video src is already prefixed with 2 forward slashes so we just need to add "https:"
-                $cdn_url = "https:$video_src";
-                ProcessVideo::dispatch($cdn_url, "$filename.mp4");
-            });
+            $source_nodes = $browser->elements('#flvv source');
+            $highest_resolution_node = $this->findHighestResolution($source_nodes);
+
+            $cdn_video_url = 'https:' . $highest_resolution_node->getAttribute('src');
+
+            ProcessVideo::dispatch($cdn_video_url, "$filename.mp4");
 
             $browser->quit();
         });

@@ -8,7 +8,7 @@ for scraping media hidden behind logins.
 **Videos**
 1. PornHub (pornhub.com)
 2. Porntrex (porntrex.com)
-2. PornWild (pornwild.com)
+2. FullPorner (fullporner.com)
 3. PornKTube (pornktube.tv)
 4. HQPorner (hqporner.com)
 5. WhoresHub (whoreshub.com)
