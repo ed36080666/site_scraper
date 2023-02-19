@@ -19,8 +19,7 @@ class ProgressController extends Controller
     {
         // todo determine if these status filters are causing bugs when
         // items status changes to something not in query
-        $in_progress = ScrapeItem::where('status', 'processing')
-            ->orWhere('status', 'done')
+        $in_progress = ScrapeItem::whereIn('status', ['queued', 'processing', 'done'])
             ->get()
             ->transform(function (ScrapeItem $item) {
                 return (new ScrapeItemDTO($item->scrapable))->toArray();

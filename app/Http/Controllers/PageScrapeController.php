@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTOs\ScrapeItemDTO;
 use App\Factories\ScraperFactory;
 use App\ScrapeItem;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -41,21 +42,29 @@ class PageScrapeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \App\Exceptions\ScraperDriverNotFoundException
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $scraper = ScraperFactory::resolveFromUrl($request->video_url);
+        try {
+            $scraper = ScraperFactory::resolveFromUrl($request->video_url);
+            $filename = str_replace("'", '', $request->filename);
 
-        $filename = str_replace("'", '', $request->filename);
-        $scraper->scrape($request->video_url, $filename);
+            $scraper->scrape($request->video_url, $filename);
 
-        return redirect()->to('/');
+            return response()->json([
+                'success' => true
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
-    public function destroy($id): \Illuminate\Http\JsonResponse
+    public function destroy($id): JsonResponse
     {
         $item = ScrapeItem::findOrFail($id);
 
