@@ -42,18 +42,13 @@ var app = new Vue({
       axios.get('/in-progress')
         .then(response => {
           response.data.forEach(item => {
-            const index = this.scrapeItems.findIndex(video => {
-              return video.id === item.id;
-            });
-
+            const index = this.scrapeItems.findIndex(video => video.id === item.id);
+            // if item already exists, refresh the entire item for new status, progress, etc.
             if (index > -1) {
-              // this.scrapeItems[index].progress = item.progress;
-
-              // if item currently waiting as queued, we will reset its data when it starts processing
-              // because we have some info we didn't have before (resolution, size, etc.)
-              // if (this.scrapeItems[index].status === 'queued') {
-                this.$set(this.scrapeItems, index, {...this.scrapeItems[index], ...item});
-              // }
+              this.$set(this.scrapeItems, index, {...this.scrapeItems[index], ...item});
+            } else {
+              // else a new item being added, push it to the list.
+              this.scrapeItems.push(item);
             }
           });
         })
