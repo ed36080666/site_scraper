@@ -28,7 +28,7 @@ class YouJizzScraper extends DuskTestCase implements ScraperInterface
             $browser->waitFor('#yj-fluid', 5);
             $src_node = $browser->element('#yj-fluid source');
 
-            $url = 'https://' . $src_node->getAttribute('src');
+            $url = 'https:' . $src_node->getAttribute('src');
 
             ProcessVideo::dispatch($url, "$filename.mp4", true);
         });
