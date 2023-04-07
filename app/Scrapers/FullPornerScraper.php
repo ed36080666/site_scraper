@@ -30,6 +30,7 @@ class FullPornerScraper extends DuskTestCase implements ScraperInterface
 
             $browser->visit($cdn_url);
 
+            $browser->waitFor('#flvv', 5);
             $source_nodes = $browser->elements('#flvv source');
             $highest_resolution_node = $this->findHighestResolution($source_nodes);
 
