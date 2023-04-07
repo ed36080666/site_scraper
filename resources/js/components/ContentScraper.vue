@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="flex gap gap-x-3.5 mb-2.5">
+    <div class="flex flex-wrap gap gap-x-3.5 gap-y-3.5 mb-2.5">
       <site-logo
         v-for="logo in logoMap"
         :is-active="url.includes(logo.base_url)"

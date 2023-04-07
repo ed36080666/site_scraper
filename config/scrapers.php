@@ -145,6 +145,18 @@ return [
                 'password'  => env('WHORESHUB_PASSWORD', null), // optional
                 'login_url' => env('WHORESHUB_LOGIN_URL', null), // optional
             ]
-        ]
+        ],
+
+        'youjizz' => [
+            'display_name'  => 'YouJizz',
+            'base_url'      => 'youjizz.com',
+            'logo_filename' => 'youjizz.png',
+            'scraper'       => \App\Scrapers\YouJizzScraper::class,
+            'auth' => [
+                'username'  => env('WHORESHUB_USERNAME', null), // optional
+                'password'  => env('WHORESHUB_PASSWORD', null), // optional
+                'login_url' => env('WHORESHUB_LOGIN_URL', null), // optional
+            ]
+        ],
     ]
 ];
