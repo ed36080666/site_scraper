@@ -12,6 +12,8 @@ for scraping media hidden behind logins.
 3. PornKTube (pornktube.tv)
 4. HQPorner (hqporner.com)
 5. WhoresHub (whoreshub.com)
+6. YouJizz (youjizz.com)
+7. Goodporn (goodporn.to)
 
 **Photo Galleries**
 1. PornPics (pornpics.com)
