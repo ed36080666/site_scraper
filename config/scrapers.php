@@ -158,5 +158,17 @@ return [
                 'login_url' => env('WHORESHUB_LOGIN_URL', null), // optional
             ]
         ],
+
+        'goodporn' => [
+            'display_name'  => 'GoodPorn',
+            'base_url'      => 'goodporn.to',
+            'logo_filename' => 'goodporn.png',
+            'scraper'       => \App\Scrapers\GoodPornScraper::class,
+            'auth' => [
+                'username'  => env('GOODPORN_USERNAME', null), // optional
+                'password'  => env('GOODPORN_PASSWORD', null), // optional
+                'login_url' => env('GOODPORN_LOGIN_URL', null), // optional
+            ]
+        ],
     ]
 ];
