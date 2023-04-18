@@ -37,6 +37,9 @@ class ProcessVideo implements ShouldQueue
     /** @var \App\ScrapeItem */
     protected $scrape_item;
 
+    /** @var string args for the output file (defaults to '-c copy') */
+    protected $output_file_args;
+
     /**
      * @var bool flag determining if the video URL is a stream (e.g. ".m3u8" extension). for streams
      * we cannot use the same ffprobe command to grab metadata like filesize, etc.
@@ -48,7 +51,7 @@ class ProcessVideo implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(string $url, string $filename, bool $is_stream = false, $ffmpeg_args = '')
+    public function __construct(string $url, string $filename, bool $is_stream = false, $ffmpeg_args = '', $output_file_args = '-c copy')
     {
         $this->url = $url;
         $this->filename = $filename;
@@ -56,6 +59,7 @@ class ProcessVideo implements ShouldQueue
         $this->output_path = config('scrapers.ffmpeg.output_path');
         $this->log_path = config('scrapers.ffmpeg.log_path');
         $this->ffmpeg_args = $ffmpeg_args;
+        $this->output_file_args = $output_file_args;
 
         $this->video = Video::create(['name' => $filename]);
 
@@ -104,7 +108,7 @@ class ProcessVideo implements ShouldQueue
         event(new ProcessingStarted($this->video));
 
         try {
-            shell_exec("ffmpeg -nostdin {$this->ffmpeg_args} -i \"{$this->url}\" -c copy \"$output_path/{$this->filename}\" 1>$log_path 2>&1");
+            shell_exec("ffmpeg -nostdin {$this->ffmpeg_args} -i \"{$this->url}\" {$this->output_file_args} \"$output_path/{$this->filename}\" 1>$log_path 2>&1");
             //        shell_exec("ffmpeg -i \"{$this->url}\" -c copy \"/home/eric/Downloads/ffmpeg_test/{$this->filename}\" > /dev/null 2>&1 &");
 
         } catch (\Exception $e) {
