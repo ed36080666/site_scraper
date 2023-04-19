@@ -24,7 +24,7 @@ class GoodPornScraper extends DuskTestCase implements ScraperInterface
         // unique ffmpeg args for removing the site watermark.
         // position of the watermark varies by resolution.
         $watermark_stripper_args = [
-            '2160' => '-vf delogo=x=2:y=4:w=620:h=160',
+            '2160' => '-vf delogo=x=2:y=4:w=630:h=160',
             '1080' => '-vf delogo=x=3:y=6:w=320:h=70',
         ];
 
