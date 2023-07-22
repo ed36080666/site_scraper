@@ -54,37 +54,11 @@ return [
             ]
         ],
 
-        // @note it appears PornWild has been shutdown. This comment-out is just to hide
-        // the option from UI. The rest of the scraping code exists in case it comes back.
-//        'pornwild' => [
-//            'display_name'  => 'PornWild',
-//            'base_url'      => 'pornwild.com',
-//            'logo_filename' => 'pornwild.png',
-//            'scraper'       => \App\Scrapers\PornwildScraper::class,
-//            'auth' => [
-//                'username'  => env('PORNWILD_USERNAME', null), // optional
-//                'password'  => env('PORNWILD_PASSWORD', null), // optional
-//                'login_url' => env('PORNWILD_LOGIN_URL', null), // optional
-//            ]
-//        ],
-
         'fullporner' => [
             'display_name'  => 'FullPorner',
             'base_url'      => 'fullporner.com',
             'logo_filename' => 'fullporner.png',
             'scraper'       => \App\Scrapers\FullPornerScraper::class,
-        ],
-
-        'pornktube' => [
-            'display_name'  => 'PornKTube',
-            'base_url'      => 'pornktube.tv',
-            'logo_filename' => 'pornktube.png',
-            'scraper'       => \App\Scrapers\PornKTubeScraper::class,
-            'auth' => [
-                'username'  => env('PORNKTUBE_USERNAME', null), // optional
-                'password'  => env('PORNKTUBE_PASSWORD', null), // optional
-                'login_url' => env('PORNKTUBE_LOGIN_URL', null), // optional
-            ]
         ],
 
         'hqporner' => [
@@ -170,5 +144,40 @@ return [
                 'login_url' => env('GOODPORN_LOGIN_URL', null), // optional
             ]
         ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Deprecated Drivers
+        |--------------------------------------------------------------------------
+        |
+        | The following driver configs are for sites that appear to have been shut down. These
+        | were all working prior to shutdowns and the underlying scrapers have not been removed.
+        | These configs will be stashed here to remove them from the UI but allow
+        | quick activation if the sties come back online.
+        |
+        */
+//        'pornktube' => [
+//            'display_name'  => 'PornKTube',
+//            'base_url'      => 'pornktube.tv',
+//            'logo_filename' => 'pornktube.png',
+//            'scraper'       => \App\Scrapers\PornKTubeScraper::class,
+//            'auth' => [
+//                'username'  => env('PORNKTUBE_USERNAME', null), // optional
+//                'password'  => env('PORNKTUBE_PASSWORD', null), // optional
+//                'login_url' => env('PORNKTUBE_LOGIN_URL', null), // optional
+//            ]
+//        ],
+
+//        'pornwild' => [
+//            'display_name'  => 'PornWild',
+//            'base_url'      => 'pornwild.com',
+//            'logo_filename' => 'pornwild.png',
+//            'scraper'       => \App\Scrapers\PornwildScraper::class,
+//            'auth' => [
+//                'username'  => env('PORNWILD_USERNAME', null), // optional
+//                'password'  => env('PORNWILD_PASSWORD', null), // optional
+//                'login_url' => env('PORNWILD_LOGIN_URL', null), // optional
+//            ]
+//        ],
     ]
 ];
