@@ -10,7 +10,6 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.19",
         "cross-env": "^7.0",
         "laravel-echo": "^1.11.0",
         "laravel-mix": "^5.0.1",
@@ -22,6 +21,7 @@
         "vue-template-compiler": "^2.6.14"
     },
     "dependencies": {
+        "axios": "^0.19",
         "vue": "^2.6.14"
     }
 }

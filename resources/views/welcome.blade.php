@@ -34,17 +34,13 @@
           csrf="{{ csrf_token() }}"
         />
       </div>
-      <scrape-list-table
-        :items="scrapeItems"
-        @delete="onItemDelete"
-      />
+      <scrape-list-table />
     </div>
   </div>
 
   <script>
     window.__INITIAL_STATE__ = @json([
       'logo_map' => $logo_map,
-      'scrape_items' => $scrape_items
     ]);
   </script>
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\ScrapeItemDTO;
 use App\Factories\ScraperFactory;
 use App\ScrapeItem;
 use Illuminate\Http\JsonResponse;
@@ -13,8 +12,6 @@ class PageScrapeController extends Controller
 {
     public function index(Request $request)
     {
-        $scrape_items = ScrapeItem::orderBy('started_at', 'DESC')->get();
-
         $logo_map = array_values(array_map(function ($driver_config) {
             return [
                 'src'      => asset("storage/logos/{$driver_config['logo_filename']}"),
@@ -24,9 +21,6 @@ class PageScrapeController extends Controller
 
         return view('welcome', [
             'logo_map' => $logo_map,
-            'scrape_items' => $scrape_items->map(function (ScrapeItem $item) {
-                return (new ScrapeItemDTO($item->scrapable))->toArray();
-            })
         ]);
     }
 

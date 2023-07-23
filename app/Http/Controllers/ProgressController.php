@@ -9,12 +9,7 @@ use Illuminate\Http\Request;
 
 class ProgressController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
+    // todo is this even used anymore?
     public function index(Request $request): JsonResponse
     {
         // todo determine if these status filters are causing bugs when
