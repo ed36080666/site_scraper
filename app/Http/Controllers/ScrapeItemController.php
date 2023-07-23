@@ -18,7 +18,7 @@ class ScrapeItemController extends Controller
                     ->orWhere('photo_galleries.name', 'like', '%'.$request->get('query').'%');
             })
             ->orderBy('started_at', 'desc')
-            ->paginate(50);
+            ->paginate($request->get('perPage', 25));
 
 
         return response()->json([

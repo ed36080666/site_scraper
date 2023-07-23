@@ -1,6 +1,18 @@
 <template>
   <section>
     <div class="mb-2">
+      <div class="flex flex-end mb-2">
+        <select
+          v-model="perPage"
+          class="ml-auto p-2 text-sm rounded-sm bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-blue-400 focus:ring-blue-400 focus-visible:ring"
+          @change="refetch"
+        >
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+        </select>
+      </div>
       <div class="flex gap-1">
         <input
           v-model="query"
@@ -95,6 +107,7 @@ export default {
       items: [],
       loading: false,
       pagination: null,
+      perPage: 25,
       pollingDuration: 3000,
       pollingInterval: null,
       query: ''
@@ -107,32 +120,30 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    this.startPolling();
+    await this.fetchItems();
+    this.startPolling(5000);
   },
   destroyed() {
     clearInterval(this.pollingInterval);
   },
   methods: {
-    async onNext() {
-      this.loading = true;
+    onNext() {
       this.currentPage = this.currentPage + 1;
-      clearInterval(this.pollingInterval);
-      await this.fetchItems();
-      this.startPolling(2000);
+      this.refetch();
     },
-    async onPrevious() {
-      this.loading = true;
+    onPrevious() {
       this.currentPage = this.currentPage > 1 ? this.currentPage - 1 : 1;
-      clearInterval(this.pollingInterval);
-      await this.fetchItems();
-      this.startPolling(2000);
+      this.refetch();
     },
-    async onSearch() {
-      this.loading = true;
+    onSearch() {
       this.currentPage = 1;
+      this.refetch();
+    },
+    async refetch() {
+      this.loading = true;
       clearInterval(this.pollingInterval);
       await this.fetchItems();
-      this.startPolling(2000);
+      this.startPolling(5000);
     },
     startPolling(delay = 0) {
       setTimeout(() => {
@@ -145,7 +156,7 @@ export default {
         clearInterval(this.pollingInterval);
         await axios.delete(`/${id}/delete`)
         await this.fetchItems();
-        this.startPolling(2000);
+        this.startPolling(5000);
       } catch (e) {
         this.error = e;
         console.error(error);
@@ -158,7 +169,8 @@ export default {
 
       const params = new URLSearchParams({
         page: this.currentPage,
-        query: this.query
+        query: this.query,
+        perPage: this.perPage,
       });
 
       try {
@@ -167,6 +179,7 @@ export default {
 
         this.pagination = meta;
         this.currentPage = meta.current_page;
+        this.perPage = meta.per_page;
         this.items = data;
       } catch (e) {
         this.error = e;
